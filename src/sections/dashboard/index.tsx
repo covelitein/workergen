@@ -1,5 +1,7 @@
 import Welcome from './Welcome'
+import AgentSkillContent from './AgentSkillContent'
 
 export {
-    Welcome
+    Welcome,
+    AgentSkillContent
 }

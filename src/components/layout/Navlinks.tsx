@@ -16,7 +16,18 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import { ReactNode } from "react";
+import { Button } from "../ui/button";
 
 export function Navlinks({
   items,
@@ -25,9 +36,11 @@ export function Navlinks({
 }: {
   items: {
     title: string;
-    url: string;
+    url?: string;
     icon?: LucideIcon;
     isActive?: boolean;
+    isModalTriggered?: boolean;
+    children?: ReactNode;
     items?: {
       title: string;
       url: string;
@@ -51,13 +64,33 @@ export function Navlinks({
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                  {item.items && (
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                  )}
-                </SidebarMenuButton>
+                {item.isModalTriggered ? (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <SidebarMenuButton tooltip={item.title}>
+                        {item.icon && <item.icon />}
+                        <span>{item.title}</span>
+                        {item.items && (
+                          <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        )}
+                      </SidebarMenuButton>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-3xl max-h-full overflow-y-scroll">
+                      <DialogHeader>
+                        <DialogTitle className="sr-only">header</DialogTitle>
+                      </DialogHeader>
+                      {item.children}
+                    </DialogContent>
+                  </Dialog>
+                ) : (
+                  <SidebarMenuButton tooltip={item.title}>
+                    {item.icon && <item.icon />}
+                    <span>{item.title}</span>
+                    {item.items && (
+                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    )}
+                  </SidebarMenuButton>
+                )}
               </CollapsibleTrigger>
               {item.items && item.items.length > 0 && (
                 <CollapsibleContent>

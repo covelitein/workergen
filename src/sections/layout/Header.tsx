@@ -8,93 +8,93 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Card } from "@/components/ui/card";
-import { AlignJustify, ChevronDown, Plus, Trash } from "lucide-react";
-import { PiChartLineDuotone, PiUsersThree } from "react-icons/pi";
-import { LiaListSolid } from "react-icons/lia";
-import { VscRefresh } from "react-icons/vsc";
-import { HiOutlineDotsVertical } from "react-icons/hi";
+import { ChevronDown, X } from "lucide-react";
 import { FaRegShareFromSquare } from "react-icons/fa6";
-import { MdOutlineFilterList, MdOutlineEditNote } from "react-icons/md";
+import { HiOutlineDotsVertical } from "react-icons/hi";
 import { LuClock9 } from "react-icons/lu";
+import { MdOutlineFilterList, MdOutlineEditNote } from "react-icons/md";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { HeaderLinks } from "@/constants";
+import { HeaderNavlink } from "@/components/layout";
+import { BiTestTube } from "react-icons/bi";
 
 export default function Header() {
   return (
-    <header className="sticky top-12 z-50 sm:px-3 px-2 sm:py-3 py-2">
-      <Card className="py-2 sm:px-4 px-2 flex items-center justify-between shrink-0 items-center gap-2">
-        {/* Dropdown Menu */}
-        <div className="flex items-center gap-2">
-          <AlignJustify />
+    <header className="sticky top-14 z-50 sm:px-3 px-2 sm:py-3 py-2">
+      <Card className="flex items-center justify-between py-2 sm:px-4 px-2 gap-2">
+        {/* Left Section: Sidebar and Dropdown */}
+        <div className="flex items-center gap-3">
+          <SidebarTrigger className="sxl:hidden [&_svg]:size-6" />
+
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center sm:gap-2 gap-1 [&_svg]:size-4">
+            <DropdownMenuTrigger
+              className="flex items-center sm:gap-2 gap-1 [&_svg]:size-4"
+              aria-label="Open dropdown"
+            >
               <span className="text-sm">My open leads</span>
               <ChevronDown className="text-base" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
+              {["Profile", "Billing", "Team", "Subscription"].map((item) => (
+                <DropdownMenuItem key={item}>{item}</DropdownMenuItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
 
-        {/* Buttons */}
+        {/* Right Section: Navigation and Actions */}
         <div className="flex items-center gap-2">
-          <div className="lg:flex hidden items-center gap-2 md:gap-4">
-            <div className="flex items-center gap-1">
-              <PiChartLineDuotone className="text-xl" />
-              <span className="text-sm">Show chart</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <LiaListSolid className="text-xl" />
-              <span className="text-sm">Focused view</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Plus className="text-base" />
-              <span className="text-sm">New</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <VscRefresh className="text-lg" />
-              <span className="text-sm">Refresh</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <PiUsersThree className="text-lg" />
-              <span className="text-sm">Collaborate</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Trash size={16} />
-              <span className="text-sm">Delete</span>
-            </div>
+          {/* Navigation Links (visible on large screens) */}
+          <div className="hidden lg:flex items-center gap-4">
+            {HeaderLinks.map((link) => (
+              <HeaderNavlink key={link.title} {...link} />
+            ))}
           </div>
+
+          {/* Action Buttons */}
           <div className="flex items-center gap-2">
+            {/* More Actions Dropdown */}
             <div className="flex items-center">
-              <div className="border-l border-l-[2px] px-1 max-sm:hidden">
-                <ChevronDown size={18} />
+              <div className="border-l border-gray-200 px-1 hidden sm:block">
+                <ChevronDown size={20} />
               </div>
-              <div className="">
-                <HiOutlineDotsVertical />
-              </div>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger aria-label="More actions">
+                  <HiOutlineDotsVertical size={20} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="">
+                  {HeaderLinks.map((link) => (
+                    <DropdownMenuItem className="sxl:hidden" key={link.title}>
+                      {link.icon} {link.title}
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuItem>
+                    <BiTestTube />
+                    <span>demo item</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
+
+            {/* Share Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="">
-                <div className="py-2 flex items-center bg-blue-600 px-3 gap-1.5 rounded-md text-white">
-                  <FaRegShareFromSquare />
+              <DropdownMenuTrigger aria-label="Share actions">
+                <div className="flex items-center gap-1.5 px-3 py-2 bg-blue-600 text-white rounded-md">
+                  <FaRegShareFromSquare size={16} />
                   <div className="w-[1px] h-5 bg-gray-100"></div>
                   <ChevronDown size={20} />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>
-                  <LuClock9 />
-                  Smart data
+                  <LuClock9 className="mr-2" /> Smart data
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <MdOutlineFilterList />
-                  Edit filters
+                  <MdOutlineFilterList className="mr-2" /> Edit filters
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <MdOutlineEditNote />
-                  Edit columns
+                  <MdOutlineEditNote className="mr-2" /> Edit columns
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

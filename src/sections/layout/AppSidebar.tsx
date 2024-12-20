@@ -1,7 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { Home, Clock3, Pin, Rocket, FilePenLine, Plus } from "lucide-react";
+import {
+  Home,
+  Clock3,
+  Pin,
+  Rocket,
+  FilePenLine,
+  Plus,
+  UserCog,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -10,11 +18,9 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Navlinks } from "@/components/layout/Navlinks";
-import {
-  TbUserQuestion,
-  TbDeviceTabletQuestion,
-} from "react-icons/tb";
+import { TbUserQuestion, TbDeviceTabletQuestion } from "react-icons/tb";
 import { MdOutlineWifiCalling3 } from "react-icons/md";
+import { AgentSkillContent } from "../dashboard";
 
 const data = {
   navMain: [
@@ -37,6 +43,13 @@ const data = {
       icon: Pin,
       isActive: false,
       items: [],
+    },
+    {
+      title: "Agent Skill",
+      icon: UserCog,
+      isActive: false,
+      isModalTriggered: true,
+      children: <AgentSkillContent />,
     },
   ],
   myWorks: [

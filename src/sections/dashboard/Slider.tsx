@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import { Swiper as SwiperType } from "swiper";
@@ -9,19 +9,22 @@ import { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  FaBuilding,
-  FaChevronLeft,
-  FaChevronRight,
-  FaCoffee,
-  FaExclamationTriangle,
-  FaHandshake,
-  FaTools,
-} from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { BsDot } from "react-icons/bs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { leadsSlide } from "@/constants";
+import { RiSparkling2Fill } from "react-icons/ri";
+import DialogSlides from "./DialogSlides";
 
 export default function Slider() {
   const swiperRef = useRef<SwiperType>();
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(1);
+
+  const openDialog = (index: number) => {
+    setActiveIndex(index);
+    setDialogOpen(true);
+  };
 
   return (
     <section className="relative">
@@ -47,55 +50,14 @@ export default function Slider() {
           },
           1024: {
             slidesPerView: 2,
-            spaceBetween: 20,
+            spaceBetween: 10,
           },
         }}
       >
         {/* Swiper Slides */}
-        {[
-          {
-            name: "Jane Reyes",
-            desc: "Engage with Jane Reyes",
-            status:
-              "Jane may be interested in upgrading espresso machines for her in-store coffee shops.",
-            img: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-            icon: <FaCoffee className="text-xl" />,
-          },
-          {
-            name: "Allan Munger",
-            desc: "Prepare for meeting with Allan",
-            status:
-              "Prepare for high-buying intent meeting Copilot scheduled for 2 PM regarding upgrading service contract.",
-            img: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-            icon: <FaHandshake className="text-xl" />,
-          },
-          {
-            name: "Winford Asher",
-            desc: "Discuss Cafe A100 for business",
-            status:
-              "Winford is evaluating Cafe A100 for potential use in his commercial venture.",
-            img: "https://i.pravatar.cc/150?u=a04258114e29026302d",
-            icon: <FaBuilding className="text-xl" />,
-          },
-          {
-            name: "Josia Love",
-            desc: "Service plan upgrade discussion",
-            status:
-              "Josia wants to explore options for upgrading to a more advanced service plan.",
-            img: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
-            icon: <FaTools className="text-xl" />,
-          },
-          {
-            name: "Harrison Curtis",
-            desc: "Address throughput concerns",
-            status:
-              "Harrison is seeking assistance to resolve a throughput issue on EspressoMaster.",
-            img: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-            icon: <FaExclamationTriangle className="text-xl" />,
-          },
-        ].map((slide, index) => (
-          <SwiperSlide key={index}>
-            <Card>
+        {leadsSlide.map((slide, index) => (
+          <SwiperSlide key={index} className="cursor-pointer">
+            <Card onClick={() => openDialog(index)}>
               <CardContent className="py-4 px-3 rounded-lg">
                 <div className="flex items-center gap-3 mb-5">
                   <Avatar>
@@ -103,16 +65,37 @@ export default function Slider() {
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <div className="">
-                    <h3 className="text-sm">{slide.name}</h3>
-                    <p className="text-sm">COO . Northwind Traders</p>
+                    <h3 className="">{slide.name}</h3>
+                    <div
+                      className={`flex items-center  justify-start ${
+                        index + 1 == 2 ? "text-[0.65rem]" : "text-xs"
+                      }`}
+                    >
+                      <h4>{slide.occupation}</h4>
+                      <BsDot />
+                      <h4>{slide.company}</h4>
+                    </div>
                   </div>
                 </div>
-                <div className="bg-blue-100 text-sm p-5 rounded-md">
-                  <p className="mb-4 flex items-center gap-3">
+                <div className="mt-5 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg relative">
+                  <RiSparkling2Fill className="absolute right-0 top-0 text-lg bg-white text-purple-400" />
+                  <div className="flex items-center gap-2 text-sm">
                     {slide.icon}
-                    <span>{slide.desc}</span>
-                  </p>
-                  <span className="text-sm">{slide.status}</span>
+                    <span>{slide.title}</span>
+                  </div>
+                  <p className="mt-2 text-sm">{slide.desc}</p>
+                </div>
+                <div className="mt-2 text-xs flex gap-2 items-center text-gray-400">
+                  {slide.tags.map((tag, idx) =>
+                    idx + 1 == 1 ? (
+                      <>
+                        <h5 key={idx}>{tag}</h5>
+                        <BsDot />
+                      </>
+                    ) : (
+                      <h5 key={idx}>{tag}</h5>
+                    )
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -127,17 +110,24 @@ export default function Slider() {
       <div className="absolute z-[9] top-1/2 w-full flex justify-between items-center">
         <div
           onClick={() => swiperRef.current?.slidePrev()}
-          className="bg-white border text-card-foreground shadow-sm p-3 rounded-full cursor-pointer pointer-events-auto -ml-4"
+          className="bg-white border text-card-foreground shadow-sm p-2 rounded-full cursor-pointer pointer-events-auto -ml-4"
         >
           <FaChevronLeft />
         </div>
         <div
           onClick={() => swiperRef.current?.slideNext()}
-          className="bg-white border text-card-foreground shadow-sm p-3 rounded-full cursor-pointer pointer-events-auto -mr-3"
+          className="bg-white border text-card-foreground shadow-sm p-2 rounded-full cursor-pointer pointer-events-auto -mr-3"
         >
           <FaChevronRight />
         </div>
       </div>
+
+      <DialogSlides
+        isOpen={isDialogOpen}
+        setOpen={setDialogOpen}
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+      />
     </section>
   );
 }
