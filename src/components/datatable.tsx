@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "@/components/ui/card";
+import { Image } from "@nextui-org/react";
 
 // Define reusable DataTable props
 interface DataTableProps<TData> {
@@ -59,13 +60,14 @@ const DataTable = <TData,>({ columns, data }: DataTableProps<TData>) => {
   return (
     <Card className="p-4">
       {/* Global Search */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center mb-4">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center mb-4 relative">
         <Input
           placeholder="Sort, filter and search with copilot"
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
           className="max-w-sm max-sm:placeholder:text-[0.9rem]"
         />
+        <Image src="/illustrations/copilot.png" width={40} alt="copilot img..." className="absolute z-9 right-2 top-2"/>
       </div>
 
       {/* Responsive Table */}

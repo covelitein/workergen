@@ -15,6 +15,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   Dialog,
@@ -27,7 +28,6 @@ import {
 } from "@/components/ui/dialog";
 
 import { ReactNode } from "react";
-import { Button } from "../ui/button";
 
 export function Navlinks({
   items,
@@ -49,9 +49,16 @@ export function Navlinks({
   myWorks: { title: string; icon: LucideIcon }[];
   sales: { title: string; icon: ReactNode }[];
 }) {
+  const { setOpenMobile, isMobile } = useSidebar();
+
+  const handleCloseMobile = () => {
+    if (isMobile) return setOpenMobile(false);
+    else return;
+  };
+
   return (
     <SidebarGroup>
-      <div className="mb-3 px-3 py-3">
+      <div onClick={handleCloseMobile} className="mb-3 px-3 py-3">
         <AlignJustify size={20} />
       </div>
       <SidebarMenu>
@@ -67,7 +74,9 @@ export function Navlinks({
                 {item.isModalTriggered ? (
                   <Dialog>
                     <DialogTrigger asChild>
-                      <SidebarMenuButton tooltip={item.title}>
+                      <SidebarMenuButton
+                        tooltip={item.title}
+                      >
                         {item.icon && <item.icon />}
                         <span>{item.title}</span>
                         {item.items && (
@@ -83,7 +92,9 @@ export function Navlinks({
                     </DialogContent>
                   </Dialog>
                 ) : (
-                  <SidebarMenuButton tooltip={item.title}>
+                  <SidebarMenuButton
+                    tooltip={item.title}
+                  >
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
                     {item.items && (

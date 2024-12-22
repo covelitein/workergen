@@ -1,6 +1,5 @@
 "use client";
 
-import { Combobox } from "@/components/custom-combox";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,10 +8,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Input } from "@/components/ui/input";
 import { Image } from "@nextui-org/react";
-import { ChevronDown, User } from "lucide-react";
+import { ChevronDown, User, X } from "lucide-react";
 import { useState } from "react";
+import { FaRegFileLines } from "react-icons/fa6";
+import { AiOutlineAlignLeft } from "react-icons/ai";
+import { PiCopySimple } from "react-icons/pi";
+import { HiOutlineArrowUturnRight } from "react-icons/hi2";
 
 export default function AgentSkillContent() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +36,14 @@ export default function AgentSkillContent() {
     setEmails(emails.filter((e) => e !== email));
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && inputValue.trim()) {
+      handleAddEmail();
+    } else if (e.key === "Backspace" && !inputValue && emails.length > 0) {
+      // Remove the last email when input is empty and backspace is pressed
+      setEmails(emails.slice(0, -1));
+    }
+  };
   return (
     <div>
       <div className="flex items-center gap-2 mb-3">
@@ -58,7 +68,7 @@ export default function AgentSkillContent() {
                 />
               </div>
             </CollapsibleTrigger>
-            <CollapsibleContent className="mt-2 leading-[2.4] text-sm">
+            <CollapsibleContent className="mt-2 leading-[2.5] text-sm">
               When{" "}
               <Button className="ml-2 bg-blue-200 text-blue-600 h-6 px-2 rounded-full hover:bg-blue-200 hover:text-blue-600">
                 <User />
@@ -66,28 +76,28 @@ export default function AgentSkillContent() {
               </Button>
               sends an email with changes to
               <Button className="ml-2 mr-2 bg-blue-200 text-blue-600 h-6 px-2 rounded-full hover:bg-blue-200 hover:text-blue-600">
-                <User />
+                <FaRegFileLines />
                 <span>confirmed purchase orders</span>
               </Button>
               , check if the resulting
               <Button className="ml-2 bg-blue-200 text-blue-600 h-6 px-2 rounded-full hover:bg-blue-200 hover:text-blue-600">
-                <User />
-                <span>confirmed purchase orders</span>
+                <AiOutlineAlignLeft />
+                <span>on-hand inventory</span>
               </Button>
               will allow
               <Button className="ml-2 mr-2 bg-blue-200 text-blue-600 h-6 px-2 rounded-full hover:bg-blue-200 hover:text-blue-600">
-                <User />
-                <span>confirmed purchase orders</span>
+                <PiCopySimple />
+                <span>all sales order</span>
               </Button>
               to
               <Button className="ml-2 bg-blue-200 text-blue-600 h-6 px-2 rounded-full hover:bg-blue-200 hover:text-blue-600">
-                <User />
-                <span>confirmed purchase orders</span>
+                <HiOutlineArrowUturnRight />
+                <span>ship without delay</span>
               </Button>
               .if so,
               <Button className="ml-2 bg-blue-200 text-blue-600 h-6 px-2 rounded-full hover:bg-blue-200 hover:text-blue-600">
-                <User />
-                <span>confirmed purchase orders</span>
+                <HiOutlineArrowUturnRight />
+                <span>update purchase order</span>
               </Button>
               to reflect the change.
             </CollapsibleContent>
@@ -104,37 +114,43 @@ export default function AgentSkillContent() {
           vendors.
         </p>
         <div className="relative mt-4">
-          <Input
-            type="email"
-            placeholder="Enter email address"
-            value={inputValue}
-            onChange={handleInputChange}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleAddEmail();
-            }}
-            className="mb-2"
-          />
-          <div className="flex gap-2 flex-wrap mt-2">
-            {emails.map((email, index) => (
-              <Badge
-                key={index}
-                variant="outline"
-                className="flex items-center gap-2 px-2 py-1"
-              >
-                {email}
-                <button
-                  className="ml-1 text-red-500 hover:text-red-700"
-                  onClick={() => handleRemoveEmail(email)}
+          <div className="flex items-center gap-2 flex-wrap md:flex-nowrap">
+            {/* Input with email chips */}
+            <div className="flex items-center flex-wrap border rounded-md px-3 py-2 focus-within:ring focus-within:ring-blue-500 flex-1">
+              {emails.map((email, index) => (
+                <Badge
+                  key={index}
+                  variant="outline"
+                  className="flex items-center gap-2 px-2 py-1 mr-2 mb-1 rounded-lg"
                 >
-                  x
-                </button>
-              </Badge>
-            ))}
+                  {email}
+                  <button
+                    className="ml-1 text-red-500 hover:text-red-700"
+                    onClick={() => handleRemoveEmail(email)}
+                  >
+                    <X size={18}/>
+                  </button>
+                </Badge>
+              ))}
+              <input
+                type="text"
+                placeholder="Enter email address"
+                value={inputValue}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                className="flex-1 border-none outline-none"
+              />
+            </div>
+
+            {/* Allow access button */}
+            <Button
+              onClick={handleAddEmail}
+              className="w-full md:w-auto px-4 py-2 whitespace-nowrap"
+            >
+              Allow access
+            </Button>
           </div>
         </div>
-        <Button onClick={handleAddEmail} className="w-full">
-          Allow access
-        </Button>
       </div>
     </div>
   );

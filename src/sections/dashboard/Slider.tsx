@@ -15,6 +15,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { leadsSlide } from "@/constants";
 import { RiSparkling2Fill } from "react-icons/ri";
 import DialogSlides from "./DialogSlides";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export default function Slider() {
   const swiperRef = useRef<SwiperType>();
@@ -88,10 +94,10 @@ export default function Slider() {
                 <div className="mt-2 text-xs flex gap-2 items-center text-gray-400">
                   {slide.tags.map((tag, idx) =>
                     idx + 1 == 1 ? (
-                      <>
-                        <h5 key={idx}>{tag}</h5>
+                      <div key={idx} className="flex items-center gap-1">
+                        <h5 >{tag}</h5>
                         <BsDot />
-                      </>
+                      </div>
                     ) : (
                       <h5 key={idx}>{tag}</h5>
                     )
